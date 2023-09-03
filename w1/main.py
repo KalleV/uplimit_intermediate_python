@@ -29,7 +29,6 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     ...
     ...
     ...
-
     expected output format is:
     {
         'China': 1.66,
@@ -43,24 +42,26 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
         'United States': 121.499
     }
     """
-    ######################################## YOUR CODE HERE ##################################################
-    data_reader = #### [YOUR CODE HERE] ####
-    data_reader_gen = #### [YOUR CODE HERE] ####
+    # Get the data from the DataProcessor object
+    data_reader = dp.data_reader
+    data_reader_gen = (row for row in data_reader)
 
     # skip first row as it is the column name
     _ = next(data_reader_gen)
 
-    # initialize the aggregate variable
+    # Initialize the aggregate variable
     aggregate = dict()
 
     for row in tqdm(data_reader_gen):
-        if row[constants.OutDataColNames.COUNTRY] not in aggregate:
-            aggregate[row[constants.OutDataColNames.COUNTRY]] = #### [YOUR CODE HERE] ####
-        aggregate[row[constants.OutDataColNames.COUNTRY]] += #### [YOUR CODE HERE] ####
+        country = row[constants.OutDataColNames.COUNTRY]
+
+        # Convert to float before adding
+        total_price = float(row[constants.OutDataColNames.TOTAL_PRICE])
+        if country not in aggregate:
+            aggregate[country] = 0
+        aggregate[country] += total_price
 
     return aggregate
-    ######################################## YOUR CODE HERE ##################################################
-
 
 def get_sales_information(file_path: str) -> Dict:
     # Initialize

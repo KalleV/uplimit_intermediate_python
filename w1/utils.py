@@ -111,21 +111,17 @@ class DataReader:
             'Country': 'Russia',
         }
         """
-    ######################################## YOUR CODE HERE ##################################################
-        # output generator -- use 'yield' keyword 
-        # generate each row: dictionary comprehension
-        
-        for n_row, row in enumerate(open(self._fp, "r")):
-            row_vals = row.strip('\n').split(self._sep)
-            
-            # define the row_vals dictionary 
-            row_vals = #### [YOUR CODE HERE] ####
-            row_vals['n_row'] = #### [YOUR CODE HERE] ####
-
-            # return results: 
-            #### [YOUR CODE HERE] ####
-    
-    ######################################## YOUR CODE HERE ##################################################
+        try:
+            with open(self._fp, "r") as file:
+                for n_row, row in enumerate(file):
+                    row_vals = row.strip('\n').split(self._sep)
+                    if len(row_vals) != len(self._col_names):
+                        raise ValueError(f"Row {n_row} has {len(row_vals)} values, but expected {len(self._col_names)}")
+                    row_dict = {col_name: val for col_name, val in zip(self._col_names, row_vals)}
+                    row_dict['n_row'] = n_row
+                    yield row_dict
+        except FileNotFoundError:
+            print(f"File {self._fp} not found.")
 
     def get_file_path(self):
         return self._fp
